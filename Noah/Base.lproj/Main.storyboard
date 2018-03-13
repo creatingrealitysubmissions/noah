@@ -61,7 +61,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IBL-L3-rgu">
-                                <rect key="frame" x="311" y="603" width="48" height="48"/>
+                                <rect key="frame" x="311" y="36" width="48" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="48" id="d5s-Bt-IKF"/>
                                     <constraint firstAttribute="height" constant="48" id="uEi-aH-YcG"/>
@@ -82,16 +82,26 @@
                                     <outletCollection property="gestureRecognizers" destination="gKj-Su-e5S" appends="YES" id="dZ6-rr-G4l"/>
                                 </connections>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DCg-CN-X2g">
+                                <rect key="frame" x="299" y="564" width="60" height="87"/>
+                                <state key="normal" image="microphone"/>
+                                <connections>
+                                    <action selector="microphoneTouchDown:" destination="BYZ-38-t0r" eventType="touchDown" id="qqA-wP-oZX"/>
+                                    <action selector="microphoneTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SJi-UD-EkM"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="4de-AX-6cE"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="5Np-Jv-XsL"/>
                             <constraint firstItem="iAt-PS-oqe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="9Om-hj-Ihf"/>
+                            <constraint firstItem="IBL-L3-rgu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="9q8-8b-rkp"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="DCg-CN-X2g" secondAttribute="trailing" constant="16" id="B4m-Ok-kQE"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="DCg-CN-X2g" secondAttribute="bottom" constant="16" id="Bvc-sF-thS"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="J8G-9Y-K6a"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IBL-L3-rgu" secondAttribute="trailing" constant="16" id="Yc9-uE-LlN"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="bui-Vt-3qR"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="IBL-L3-rgu" secondAttribute="bottom" constant="16" id="eIr-Yi-jeB"/>
                             <constraint firstItem="zBM-vA-r1M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="k0j-h9-8aX"/>
                             <constraint firstItem="zBM-vA-r1M" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-4" id="pE6-PB-Tas"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iAt-PS-oqe" secondAttribute="bottom" constant="16" id="v7c-8g-k8Z"/>
@@ -101,6 +111,7 @@
                     <connections>
                         <outlet property="cameraButton" destination="IBL-L3-rgu" id="A6b-F2-mO4"/>
                         <outlet property="menuButton" destination="iAt-PS-oqe" id="iyk-zA-3AL"/>
+                        <outlet property="microphoneButton" destination="DCg-CN-X2g" id="A1q-Lk-WZ0"/>
                         <outlet property="noahIV" destination="zBM-vA-r1M" id="VbM-MG-o7X"/>
                         <outlet property="sceneView" destination="GdU-Nf-diF" id="YDB-Ml-d3b"/>
                     </connections>
@@ -119,5 +130,6 @@
         <image name="Noah" width="672" height="748"/>
         <image name="camera" width="62" height="62"/>
         <image name="menu" width="32" height="32"/>
+        <image name="microphone" width="60" height="87"/>
     </resources>
 </document>
