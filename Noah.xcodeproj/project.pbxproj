@@ -15,6 +15,8 @@
 		D81A875820579A2A007A2C7F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D81A875620579A2A007A2C7F /* LaunchScreen.storyboard */; };
 		D81A876120579D6D007A2C7F /* ArcGIS.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D81A876020579D6D007A2C7F /* ArcGIS.bundle */; };
 		D8558FEE2057AB93008211AD /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8558FED2057AB93008211AD /* SplashVC.swift */; };
+		D8558FF12057D77E008211AD /* CheckButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8558FF02057D77E008211AD /* CheckButton.swift */; };
+		D8558FF32057D89F008211AD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8558FF22057D89F008211AD /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		D81A875920579A2A007A2C7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D81A876020579D6D007A2C7F /* ArcGIS.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ArcGIS.bundle; path = ../../../../../../Library/SDKs/ArcGIS/iOS/Frameworks/Static/ArcGIS.framework/Versions/Current/Resources/ArcGIS.bundle; sourceTree = "<group>"; };
 		D8558FED2057AB93008211AD /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
+		D8558FF02057D77E008211AD /* CheckButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckButton.swift; sourceTree = "<group>"; };
+		D8558FF22057D89F008211AD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		DB4464A773B0F955C45FDD09 /* Pods_Noah.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Noah.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -86,6 +90,8 @@
 				D81A874D20579A2A007A2C7F /* AppDelegate.swift */,
 				D8558FEC2057AB85008211AD /* Controllers */,
 				D81A874F20579A2A007A2C7F /* ViewController.swift */,
+				D8558FF22057D89F008211AD /* Extensions.swift */,
+				D8558FEF2057D766008211AD /* Views */,
 				D81A875120579A2A007A2C7F /* Main.storyboard */,
 				D81A875420579A2A007A2C7F /* Assets.xcassets */,
 				D81A875620579A2A007A2C7F /* LaunchScreen.storyboard */,
@@ -108,6 +114,14 @@
 				D8558FED2057AB93008211AD /* SplashVC.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		D8558FEF2057D766008211AD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D8558FF02057D77E008211AD /* CheckButton.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,8 +251,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8558FF32057D89F008211AD /* Extensions.swift in Sources */,
 				D81A875020579A2A007A2C7F /* ViewController.swift in Sources */,
 				D81A874E20579A2A007A2C7F /* AppDelegate.swift in Sources */,
+				D8558FF12057D77E008211AD /* CheckButton.swift in Sources */,
 				D8558FEE2057AB93008211AD /* SplashVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

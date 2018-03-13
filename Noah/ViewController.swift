@@ -8,10 +8,55 @@
 
 import UIKit
 import ArcGIS
+import Speech
+
+extension ViewController : SFSpeechRecognizerDelegate {
+    
+}
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var sceneView: AGSSceneView!
+    @IBOutlet weak var menuButton: UIButton! {
+        didSet {
+            menuButton.layer.cornerRadius = 24
+            menuButton.layer.masksToBounds = true
+        }
+    }
+    @IBAction func menuHit(_ sender: UIButton) {
+    }
+    
+    @IBOutlet weak var cameraButton: UIButton! {
+        didSet {
+            cameraButton.layer.cornerRadius = 24
+            cameraButton.layer.masksToBounds = true
+        }
+    }
+    @IBAction func cameraHit(_ sender: UIButton) {
+    }
+    
+    @IBOutlet weak var noahIV: UIImageView! {
+        didSet {
+            noahIV.layer.cornerRadius = 40
+            noahIV.layer.masksToBounds = true
+        }
+    }
+    @IBAction func noahTapped(_ sender: UITapGestureRecognizer) {
+        let utterance = AVSpeechUtterance(string: "Zoom in so I can get a better view.")
+//        print(AVSpeechSynthesisVoice.speechVoices())
+        let voice = AVSpeechSynthesisVoice(language: "en-GB")
+        utterance.voice = voice
+
+        self.synthesizer.speak(utterance)
+    }
+    
+    
+    private let speechRecognizer = SFSpeechRecognizer(locale: Locale.init(identifier: "en-US"))
+    private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
+    private var recognitionTask: SFSpeechRecognitionTask?
+    private let audioEngine = AVAudioEngine()
+    private let synthesizer = AVSpeechSynthesizer()
+
     
     var portal : AGSPortal!
     
@@ -136,6 +181,7 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         //Assign the scene to the scene view
         sceneView.scene = scene
+        speechRecognizer?.delegate = self
         //Set the current viewpoint of the camera
 //        let camera = AGSCamera(latitude: 48.38, longitude: -4.493, altitude: 100, heading: 320, pitch: 70, roll: 0)
         let camera = AGSCamera(latitude: 39.94, longitude: -75.19, altitude: 1600, heading: 320, pitch: 70, roll: 0)
@@ -144,6 +190,23 @@ class ViewController: UIViewController {
         sceneView.currentViewpointCamera()
         
 //        addLayer()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayAndRecord, with:[.mixWithOthers,.defaultToSpeaker,.allowBluetooth])
+        } catch {
+            print(error)
+        }
+        
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print(error)
+        }
+
     }
 
     override func didReceiveMemoryWarning() {

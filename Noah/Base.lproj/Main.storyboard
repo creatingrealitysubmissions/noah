@@ -48,26 +48,76 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iAt-PS-oqe">
+                                <rect key="frame" x="16" y="603" width="48" height="48"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="48" id="YyH-3d-gBB"/>
+                                    <constraint firstAttribute="height" constant="48" id="cIm-lu-AtW"/>
+                                </constraints>
+                                <state key="normal" image="menu"/>
+                                <connections>
+                                    <action selector="menuHit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qbH-Uc-hyM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IBL-L3-rgu">
+                                <rect key="frame" x="311" y="603" width="48" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="48" id="d5s-Bt-IKF"/>
+                                    <constraint firstAttribute="height" constant="48" id="uEi-aH-YcG"/>
+                                </constraints>
+                                <state key="normal" image="camera"/>
+                                <connections>
+                                    <action selector="cameraHit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QBg-ac-UAb"/>
+                                </connections>
+                            </button>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Noah" translatesAutoresizingMaskIntoConstraints="NO" id="zBM-vA-r1M">
+                                <rect key="frame" x="16" y="16" width="80" height="80"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="AD7-7b-uAs"/>
+                                    <constraint firstAttribute="height" constant="80" id="Kdu-Et-w1U"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="gKj-Su-e5S" appends="YES" id="dZ6-rr-G4l"/>
+                                </connections>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="4de-AX-6cE"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="5Np-Jv-XsL"/>
+                            <constraint firstItem="iAt-PS-oqe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="9Om-hj-Ihf"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="J8G-9Y-K6a"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IBL-L3-rgu" secondAttribute="trailing" constant="16" id="Yc9-uE-LlN"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="bui-Vt-3qR"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="IBL-L3-rgu" secondAttribute="bottom" constant="16" id="eIr-Yi-jeB"/>
+                            <constraint firstItem="zBM-vA-r1M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="k0j-h9-8aX"/>
+                            <constraint firstItem="zBM-vA-r1M" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-4" id="pE6-PB-Tas"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iAt-PS-oqe" secondAttribute="bottom" constant="16" id="v7c-8g-k8Z"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="cameraButton" destination="IBL-L3-rgu" id="A6b-F2-mO4"/>
+                        <outlet property="menuButton" destination="iAt-PS-oqe" id="iyk-zA-3AL"/>
+                        <outlet property="noahIV" destination="zBM-vA-r1M" id="VbM-MG-o7X"/>
                         <outlet property="sceneView" destination="GdU-Nf-diF" id="YDB-Ml-d3b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="gKj-Su-e5S">
+                    <connections>
+                        <action selector="noahTapped:" destination="BYZ-38-t0r" id="qAR-v3-LjW"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
         </scene>
     </scenes>
     <resources>
         <image name="Noah" width="672" height="748"/>
+        <image name="camera" width="62" height="62"/>
+        <image name="menu" width="32" height="32"/>
     </resources>
 </document>
