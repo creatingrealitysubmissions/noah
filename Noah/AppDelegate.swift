@@ -16,6 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
+    // Client ID : vQ0nwhUqFsto4M1V
+    // Client Secret: b79c92aa5a9a4a6b832c1c04ef9d09a9
+    
+    // Temp Token : n299fB9BrHdNe8KXEFiCSFVMQPidHwEzNsPeVJ8OLeBezyFHlDtpM1Kgn2HrejasA5bj_aA88QWDzvAE6acs8wVH90fJjrIrHz4tp84dZleEwUQyRDJRffy0y6Ngsr86484ilcr6HtdG4JY6C53IWA
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -24,10 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Define the basemap layer with ESRI imagery basemap
         scene.basemap = AGSBasemap.imagery()
         //Create a scene layer from a scene service and add it to a scene
-        let philly = "http://scenesampleserverdev.arcgis.com/arcgis/rest/services/Hosted/Buildings_Philadelphia/SceneServer"
+        let philly = "http://scenesampleserverdev.arcgis.com/arcgis/rest/services/Hosted/Buildings_Philadelphia/SceneServer/layers/0"
         let brest = "https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0"
         
-        let sceneLayer = AGSArcGISSceneLayer(url: URL(string: brest)!)
+        let sceneLayer = AGSArcGISSceneLayer(url: URL(string: philly)!)
         scene.operationalLayers.add(sceneLayer)
         return true
     }
