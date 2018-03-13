@@ -7,14 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D32992787AE43D3959976621 /* Pods_Noah.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB4464A773B0F955C45FDD09 /* Pods_Noah.framework */; };
 		D81A874E20579A2A007A2C7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81A874D20579A2A007A2C7F /* AppDelegate.swift */; };
 		D81A875020579A2A007A2C7F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81A874F20579A2A007A2C7F /* ViewController.swift */; };
 		D81A875320579A2A007A2C7F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D81A875120579A2A007A2C7F /* Main.storyboard */; };
 		D81A875520579A2A007A2C7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D81A875420579A2A007A2C7F /* Assets.xcassets */; };
 		D81A875820579A2A007A2C7F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D81A875620579A2A007A2C7F /* LaunchScreen.storyboard */; };
+		D81A876120579D6D007A2C7F /* ArcGIS.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D81A876020579D6D007A2C7F /* ArcGIS.bundle */; };
+		D8558FEE2057AB93008211AD /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8558FED2057AB93008211AD /* SplashVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F31EAA177F323E8F7B415D2 /* Pods-Noah.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Noah.release.xcconfig"; path = "Pods/Target Support Files/Pods-Noah/Pods-Noah.release.xcconfig"; sourceTree = "<group>"; };
+		7EC5F28054BDD044293ACBDE /* Pods-Noah.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Noah.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Noah/Pods-Noah.debug.xcconfig"; sourceTree = "<group>"; };
 		D81A874A20579A2A007A2C7F /* Noah.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noah.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D81A874D20579A2A007A2C7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D81A874F20579A2A007A2C7F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -22,6 +27,9 @@
 		D81A875420579A2A007A2C7F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D81A875720579A2A007A2C7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D81A875920579A2A007A2C7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D81A876020579D6D007A2C7F /* ArcGIS.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = ArcGIS.bundle; path = ../../../../../../Library/SDKs/ArcGIS/iOS/Frameworks/Static/ArcGIS.framework/Versions/Current/Resources/ArcGIS.bundle; sourceTree = "<group>"; };
+		D8558FED2057AB93008211AD /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
+		DB4464A773B0F955C45FDD09 /* Pods_Noah.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Noah.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,17 +37,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D32992787AE43D3959976621 /* Pods_Noah.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		265BDD431CEA87E1803897DB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7EC5F28054BDD044293ACBDE /* Pods-Noah.debug.xcconfig */,
+				5F31EAA177F323E8F7B415D2 /* Pods-Noah.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BFB8388115E143F2359ABA01 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DB4464A773B0F955C45FDD09 /* Pods_Noah.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D81A874120579A2A007A2C7F = {
 			isa = PBXGroup;
 			children = (
 				D81A874C20579A2A007A2C7F /* Noah */,
 				D81A874B20579A2A007A2C7F /* Products */,
+				265BDD431CEA87E1803897DB /* Pods */,
+				BFB8388115E143F2359ABA01 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -54,7 +82,9 @@
 		D81A874C20579A2A007A2C7F /* Noah */ = {
 			isa = PBXGroup;
 			children = (
+				D81A875F20579CF2007A2C7F /* ARCGIS */,
 				D81A874D20579A2A007A2C7F /* AppDelegate.swift */,
+				D8558FEC2057AB85008211AD /* Controllers */,
 				D81A874F20579A2A007A2C7F /* ViewController.swift */,
 				D81A875120579A2A007A2C7F /* Main.storyboard */,
 				D81A875420579A2A007A2C7F /* Assets.xcassets */,
@@ -64,6 +94,22 @@
 			path = Noah;
 			sourceTree = "<group>";
 		};
+		D81A875F20579CF2007A2C7F /* ARCGIS */ = {
+			isa = PBXGroup;
+			children = (
+				D81A876020579D6D007A2C7F /* ArcGIS.bundle */,
+			);
+			path = ARCGIS;
+			sourceTree = "<group>";
+		};
+		D8558FEC2057AB85008211AD /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				D8558FED2057AB93008211AD /* SplashVC.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -71,9 +117,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D81A875C20579A2A007A2C7F /* Build configuration list for PBXNativeTarget "Noah" */;
 			buildPhases = (
+				81C3A8D2AEFFA21567CB4102 /* [CP] Check Pods Manifest.lock */,
 				D81A874620579A2A007A2C7F /* Sources */,
 				D81A874720579A2A007A2C7F /* Frameworks */,
 				D81A874820579A2A007A2C7F /* Resources */,
+				F564FEA0935167139048C7E0 /* [CP] Embed Pods Frameworks */,
+				DBB1954348B92BB1432F1220 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -125,11 +174,63 @@
 			files = (
 				D81A875820579A2A007A2C7F /* LaunchScreen.storyboard in Resources */,
 				D81A875520579A2A007A2C7F /* Assets.xcassets in Resources */,
+				D81A876120579D6D007A2C7F /* ArcGIS.bundle in Resources */,
 				D81A875320579A2A007A2C7F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		81C3A8D2AEFFA21567CB4102 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Noah-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DBB1954348B92BB1432F1220 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Noah/Pods-Noah-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F564FEA0935167139048C7E0 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Noah/Pods-Noah-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		D81A874620579A2A007A2C7F /* Sources */ = {
@@ -138,6 +239,7 @@
 			files = (
 				D81A875020579A2A007A2C7F /* ViewController.swift in Sources */,
 				D81A874E20579A2A007A2C7F /* AppDelegate.swift in Sources */,
+				D8558FEE2057AB93008211AD /* SplashVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,12 +374,21 @@
 		};
 		D81A875D20579A2A007A2C7F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7EC5F28054BDD044293ACBDE /* Pods-Noah.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2BY2NMR4CA;
+				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/SDKs/ArcGIS/iOS/Frameworks/Static";
 				INFOPLIST_FILE = Noah/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					ArcGIS,
+					"-l",
+					"c++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.epage.Noah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
@@ -287,12 +398,21 @@
 		};
 		D81A875E20579A2A007A2C7F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5F31EAA177F323E8F7B415D2 /* Pods-Noah.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2BY2NMR4CA;
+				FRAMEWORK_SEARCH_PATHS = "$(HOME)/Library/SDKs/ArcGIS/iOS/Frameworks/Static";
 				INFOPLIST_FILE = Noah/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-framework",
+					ArcGIS,
+					"-l",
+					"c++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.epage.Noah;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;

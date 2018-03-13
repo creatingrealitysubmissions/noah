@@ -7,15 +7,28 @@
 //
 
 import UIKit
+import ArcGIS
+
+var scene: AGSScene!
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        //Create an instance of a scene
+        scene = AGSScene()
+        //Define the basemap layer with ESRI imagery basemap
+        scene.basemap = AGSBasemap.imagery()
+        //Create a scene layer from a scene service and add it to a scene
+        let philly = "http://scenesampleserverdev.arcgis.com/arcgis/rest/services/Hosted/Buildings_Philadelphia/SceneServer"
+        let brest = "https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Buildings_Brest/SceneServer/layers/0"
+        
+        let sceneLayer = AGSArcGISSceneLayer(url: URL(string: brest)!)
+        scene.operationalLayers.add(sceneLayer)
         return true
     }
 
