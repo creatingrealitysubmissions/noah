@@ -17,6 +17,8 @@
 		D8558FEE2057AB93008211AD /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8558FED2057AB93008211AD /* SplashVC.swift */; };
 		D8558FF12057D77E008211AD /* CheckButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8558FF02057D77E008211AD /* CheckButton.swift */; };
 		D8558FF32057D89F008211AD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8558FF22057D89F008211AD /* Extensions.swift */; };
+		D8558FF720587A40008211AD /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = D8558FF520587A3F008211AD /* beep.wav */; };
+		D8558FF820587A40008211AD /* reveal.wav in Resources */ = {isa = PBXBuildFile; fileRef = D8558FF620587A3F008211AD /* reveal.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		D8558FED2057AB93008211AD /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		D8558FF02057D77E008211AD /* CheckButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckButton.swift; sourceTree = "<group>"; };
 		D8558FF22057D89F008211AD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		D8558FF520587A3F008211AD /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
+		D8558FF620587A3F008211AD /* reveal.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = reveal.wav; sourceTree = "<group>"; };
 		DB4464A773B0F955C45FDD09 /* Pods_Noah.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Noah.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -86,6 +90,7 @@
 		D81A874C20579A2A007A2C7F /* Noah */ = {
 			isa = PBXGroup;
 			children = (
+				D8558FF420587A3F008211AD /* Sounds */,
 				D81A875F20579CF2007A2C7F /* ARCGIS */,
 				D81A874D20579A2A007A2C7F /* AppDelegate.swift */,
 				D8558FEC2057AB85008211AD /* Controllers */,
@@ -122,6 +127,15 @@
 				D8558FF02057D77E008211AD /* CheckButton.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		D8558FF420587A3F008211AD /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				D8558FF520587A3F008211AD /* beep.wav */,
+				D8558FF620587A3F008211AD /* reveal.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,8 +200,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8558FF720587A40008211AD /* beep.wav in Resources */,
 				D81A875820579A2A007A2C7F /* LaunchScreen.storyboard in Resources */,
 				D81A875520579A2A007A2C7F /* Assets.xcassets in Resources */,
+				D8558FF820587A40008211AD /* reveal.wav in Resources */,
 				D81A876120579D6D007A2C7F /* ArcGIS.bundle in Resources */,
 				D81A875320579A2A007A2C7F /* Main.storyboard in Resources */,
 			);
