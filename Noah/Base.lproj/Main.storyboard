@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8PF-tV-tpl">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -46,7 +46,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GdU-Nf-diF" customClass="AGSSceneView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.57411024310000003" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iAt-PS-oqe">
                                 <rect key="frame" x="16" y="603" width="48" height="48"/>
@@ -90,25 +90,37 @@
                                     <action selector="microphoneTouchUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SJi-UD-EkM"/>
                                 </connections>
                             </button>
+                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Noah" translatesAutoresizingMaskIntoConstraints="NO" id="ht8-cp-AVE">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="61a-pf-CGJ" appends="YES" id="YRc-WR-YX0"/>
+                                </connections>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.57411024305555558" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="GdU-Nf-diF" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="4de-AX-6cE"/>
+                            <constraint firstItem="ht8-cp-AVE" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="1Ak-Ws-9NR"/>
+                            <constraint firstItem="ht8-cp-AVE" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="4Tn-8d-P8j"/>
+                            <constraint firstItem="GdU-Nf-diF" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="4de-AX-6cE"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="5Np-Jv-XsL"/>
                             <constraint firstItem="iAt-PS-oqe" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="9Om-hj-Ihf"/>
                             <constraint firstItem="IBL-L3-rgu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="9q8-8b-rkp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="DCg-CN-X2g" secondAttribute="trailing" constant="16" id="B4m-Ok-kQE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="DCg-CN-X2g" secondAttribute="bottom" constant="16" id="Bvc-sF-thS"/>
-                            <constraint firstItem="GdU-Nf-diF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="J8G-9Y-K6a"/>
+                            <constraint firstItem="GdU-Nf-diF" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="J8G-9Y-K6a"/>
+                            <constraint firstItem="ht8-cp-AVE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="PAq-Nr-jEa"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IBL-L3-rgu" secondAttribute="trailing" constant="16" id="Yc9-uE-LlN"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="bui-Vt-3qR"/>
                             <constraint firstItem="zBM-vA-r1M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="k0j-h9-8aX"/>
                             <constraint firstItem="zBM-vA-r1M" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-4" id="pE6-PB-Tas"/>
+                            <constraint firstItem="ht8-cp-AVE" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="uaG-qv-dyo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iAt-PS-oqe" secondAttribute="bottom" constant="16" id="v7c-8g-k8Z"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="askIV" destination="ht8-cp-AVE" id="Hoy-fu-XyA"/>
                         <outlet property="cameraButton" destination="IBL-L3-rgu" id="A6b-F2-mO4"/>
                         <outlet property="menuButton" destination="iAt-PS-oqe" id="iyk-zA-3AL"/>
                         <outlet property="microphoneButton" destination="DCg-CN-X2g" id="A1q-Lk-WZ0"/>
@@ -120,6 +132,11 @@
                 <tapGestureRecognizer id="gKj-Su-e5S">
                     <connections>
                         <action selector="noahTapped:" destination="BYZ-38-t0r" id="qAR-v3-LjW"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="61a-pf-CGJ">
+                    <connections>
+                        <action selector="askIVTapped:" destination="BYZ-38-t0r" id="buo-xi-p7t"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

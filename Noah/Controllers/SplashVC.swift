@@ -19,15 +19,19 @@ class SplashVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard let vc = storyboard?.instantiateViewController(withIdentifier: "ViewController") else { return }
-        view.window?.rootViewController = vc
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ViewController") else { return }
+            self.view.window?.rootViewController = vc
+        }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    
+
 
     /*
     // MARK: - Navigation

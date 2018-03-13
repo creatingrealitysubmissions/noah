@@ -14,8 +14,132 @@ extension ViewController : SFSpeechRecognizerDelegate {
     
 }
 
-class ViewController: UIViewController {
+extension ViewController: AVCaptureAudioDataOutputSampleBufferDelegate {
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+        speechRequest?.appendAudioSampleBuffer(sampleBuffer)
+    }
+    
+}
 
+extension ViewController: SFSpeechRecognitionTaskDelegate {
+    func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult) {
+        
+        let best = recognitionResult.bestTranscription.formattedString
+        print(best)
+        processText(text: best)
+        
+    }
+}
+
+class ViewController: UIViewController {
+    
+    enum AppMode { case ask, map }
+    var appMode : AppMode = .ask
+    
+    func say(_ text:String) {
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
+        self.synthesizer.speak(utterance)
+    }
+
+    @IBOutlet weak var askIV: UIImageView!
+    @IBAction func askIVTapped(_ sender: UITapGestureRecognizer) {
+        doAsk()
+    }
+    func doAsk() {
+        self.say("Where would you like to go?")
+
+        /*
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.say("Where would you like to go?")
+            self.startRecording()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                if self.audioEngine.isRunning {
+                    self.audioEngine.stop()
+                    self.recognitionRequest?.endAudio()
+                } else {
+                }
+            }
+        }
+         */
+    }
+    
+    private var capture: AVCaptureSession?
+    private var speechRequest: SFSpeechAudioBufferRecognitionRequest?
+    func startRecognizer() {
+        SFSpeechRecognizer.requestAuthorization { (status) in
+            switch status {
+            case .authorized:
+                let sf = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
+                self.speechRequest = SFSpeechAudioBufferRecognitionRequest()
+                guard let task = sf?.recognitionTask(with: self.speechRequest!, delegate: self) else { print("No Task"); return }
+                print(task)
+                DispatchQueue.main.async {
+                    self.startCapture()
+                }
+            case .denied:
+                fallthrough
+            case .notDetermined:
+                fallthrough
+            case.restricted:
+                print("User Autorization Issue")
+            }
+        }
+    }
+    func endRecognizer() {
+        endCapture()
+        speechRequest?.endAudio()
+    }
+    
+    func startCapture() {
+        
+        capture = AVCaptureSession()
+        
+        guard let audioDev = AVCaptureDevice.default(for: AVMediaType.audio) else {
+            print("Could not get capture device.")
+            return
+        }
+        
+        guard let audioIn = try? AVCaptureDeviceInput(device: audioDev) else {
+            print("Could not create input device.")
+            return
+        }
+        
+        guard true == capture?.canAddInput(audioIn) else {
+            print("Couls not add input device")
+            return
+        }
+        
+        capture?.addInput(audioIn)
+        
+        let audioOut = AVCaptureAudioDataOutput()
+        audioOut.setSampleBufferDelegate(self, queue: DispatchQueue.main)
+        
+        guard true == capture?.canAddOutput(audioOut) else {
+            print("Could not add audio output")
+            return
+        }
+        
+        capture?.addOutput(audioOut)
+        audioOut.connection(with: AVMediaType.audio)
+        capture?.startRunning()
+        
+        
+    }
+    
+    func endCapture() {
+        
+        if true == capture?.isRunning {
+            capture?.stopRunning()
+        }
+    }
+
+    
+    
+    
+    
+
+    
     @IBOutlet weak var sceneView: AGSSceneView!
     @IBOutlet weak var menuButton: UIButton! {
         didSet {
@@ -42,11 +166,7 @@ class ViewController: UIViewController {
         }
     }
     @IBAction func noahTapped(_ sender: UITapGestureRecognizer) {
-        let utterance = AVSpeechUtterance(string: "Zoom in so I can get a better view.")
-//        print(AVSpeechSynthesisVoice.speechVoices())
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
-
-        self.synthesizer.speak(utterance)
+        say("Zoom in so I can get a better view.")
     }
     
     @IBOutlet weak var microphoneButton: UIButton!
@@ -199,6 +319,7 @@ class ViewController: UIViewController {
         sceneView.isAttributionTextVisible = false
         sceneView.currentViewpointCamera()
         
+        /*
         SFSpeechRecognizer.requestAuthorization { (authStatus) in  //4
             
             var isButtonEnabled = false
@@ -224,6 +345,7 @@ class ViewController: UIViewController {
                 self.microphoneButton.isEnabled = isButtonEnabled
             }
         }
+         */
 
 //        addLayer()
     }
@@ -242,6 +364,9 @@ class ViewController: UIViewController {
             print(error)
         }
         
+        startRecognizer()
+        
+        /*
         let inputNode = audioEngine.inputNode
         let recordingFormat = inputNode.outputFormat(forBus: 0)
         inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
@@ -249,11 +374,15 @@ class ViewController: UIViewController {
         }
         
         audioEngine.prepare()
+         */
 
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if appMode == .ask {
+            doAsk()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -321,9 +450,7 @@ class ViewController: UIViewController {
                     self.processText(text: text)
                     
                 } else {
-                    let utterance = AVSpeechUtterance(string: "Say again?")
-                    utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
-                    self.synthesizer.speak(utterance)
+                    self.say("Say again?")
                 }
                 
             }
@@ -348,9 +475,25 @@ class ViewController: UIViewController {
         let str = text.lowercased()
         
         let sa = str.components(separatedBy: " ")
-        if sa.contains("done") || sa.contains("exit") {
-
-            return
+        if sa.contains("help") {
+            if appMode == .map {
+                say("Try saying things like down, up, report, or reset")
+            } else {
+                say("Try saying a location like Philidelphia")
+            }
+        } else if appMode == .ask {
+            say("Let's go to philly!")
+            UIView.animate(withDuration: 0.4) { self.askIV.alpha = 0 }
+            appMode = .map
+            
+        } else if sa.contains("done") || sa.contains("exit") {
+            if appMode == .ask { return }
+            appMode = .ask
+            UIView.animate(withDuration: 0.4) { self.askIV.alpha = 1 }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.doAsk()
+            }
         } else if sa.contains("down") {
             
             let cam = sceneView.currentViewpointCamera()
@@ -365,13 +508,7 @@ class ViewController: UIViewController {
             let newCam = cam.elevate(withDeltaAltitude: z)
             sceneView.setViewpointCamera(newCam, duration: 1.5, completion: nil)
             
-        } else if sa.contains("help") {
-            let utterance = AVSpeechUtterance(string: "Try saying things like down, up, report, or reset")
-            utterance.voice = AVSpeechSynthesisVoice(language: "en-GB")
-            self.synthesizer.speak(utterance)
-            return
         }
-        
     }
 
 
