@@ -507,7 +507,7 @@ class ViewController: UIViewController {
         sceneView.isAttributionTextVisible = false
 
         
-        let cameraSanDiego = AGSCamera(latitude: 32.707, longitude: -117.156, altitude: 100, heading: 180, pitch: 0, roll: 0)
+//        let cameraSanDiego = AGSCamera(latitude: 32.707, longitude: -117.156, altitude: 100, heading: 180, pitch: 0, roll: 0)
         let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
                                        altitude: 1500,
                                        heading: 45,
@@ -582,14 +582,17 @@ class ViewController: UIViewController {
         } else if appMode == .ask {
             twoWord = false
             say("Let's go to philly!")
-            UIView.animate(withDuration: 0.4) { self.askIV.alpha = 0 }
+            UIView.animate(withDuration: 1.0) { self.askIV.alpha = 0 }
             appMode = .map
-            
+        } else if sa.contains("vocabulary") {
+            twoWord = false
+            say("zoom, bigger, mark, clear, origin, exit, show safety, crime, demo, census")
+
         } else if sa.contains("done") || sa.contains("exit") {
             twoWord = false
             restartRecording(play:true)
             if appMode == .ask { return }
-            UIView.animate(withDuration: 0.4) { self.askIV.alpha = 1 }
+            UIView.animate(withDuration: 0.5) { self.askIV.alpha = 1 }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 self.doAsk()
@@ -615,7 +618,7 @@ class ViewController: UIViewController {
         } else if sa.contains("zoom") {
             twoWord = false
             let fpc : AGSFirstPersonCameraController = sceneView.cameraController as! AGSFirstPersonCameraController
-            if fpc.translationFactor <= 250 {
+            if fpc.translationFactor <= 125 {
                 say("Too close")
             } else {
                 restartRecording(play:true)
@@ -657,6 +660,23 @@ class ViewController: UIViewController {
                 fpc.initialPosition = nc
             }
             
+        } else if sa.contains("origin") {
+            twoWord = false
+            
+            let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
+                                         altitude: 1500,
+                                         heading: 45,
+                                         pitch: 0,
+                                         roll: 0)
+
+            let fpc : AGSFirstPersonCameraController = sceneView.cameraController as! AGSFirstPersonCameraController
+            
+            restartRecording(play:true)
+            
+            fpc.isFadingTransition = true
+            fpc.translationFactor = 1000
+            fpc.initialPosition = cameraPhilly
+
         } else if sa.contains("mark") {
             twoWord = false
             restartRecording(play:true)
@@ -685,6 +705,13 @@ class ViewController: UIViewController {
             sceneView.setViewpointCamera(nc, duration: 1.5, completion: nil)
              */
             
+        } else if sa.contains("clear") {
+            twoWord = false
+            restartRecording(play:true)
+            
+            let removes = sceneView.graphicsOverlays.filter { $0 is AGSGraphicsOverlay }
+            sceneView.graphicsOverlays.removeObjects(in: removes)
+
         } else if sa.contains("show") && !twoWord {
             twoWord = true
             scene.operationalLayers.removeAllObjects()
