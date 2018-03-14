@@ -44,7 +44,7 @@ extension ViewController: AVSpeechSynthesizerDelegate {
             do {
                 try self.startRecording()
             } catch (let e) {
-                print(e)
+//                print(e)
             }
 
         }
@@ -67,6 +67,8 @@ class ViewController: UIViewController {
     }
     
     func playDone() {
+        AudioServicesPlayAlertSound(SystemSoundID(1322))
+
 //        audioOut()
 //        donePlayer.play()
     }
@@ -79,6 +81,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var askIV: UIImageView!
     @IBAction func askIVTapped(_ sender: UITapGestureRecognizer) {
+        restartRecording()
         doAsk()
     }
     func doAsk() {
@@ -143,7 +146,7 @@ class ViewController: UIViewController {
             try AVAudioSession.sharedInstance().setActive(true)
             microphoneButton.alpha = 1
         } catch {
-            print(error)
+//            print(error)
         }
     }
     private func audioOut() {
@@ -153,7 +156,7 @@ class ViewController: UIViewController {
             try AVAudioSession.sharedInstance().setActive(true)
             microphoneButton.alpha = 0.5
         } catch {
-            print(error)
+//            print(error)
         }
     }
     
@@ -190,7 +193,7 @@ class ViewController: UIViewController {
             [unowned self]
             (result, _) in
             if let transcription = result?.bestTranscription {
-                print(transcription)
+//                print(transcription)
                 print(transcription.formattedString)
                 self.processText(text: transcription.formattedString)
             }
@@ -200,15 +203,16 @@ class ViewController: UIViewController {
     private func stopRecording() {
         print("STOP RECORDING...")
         twoWord = false
-        audioOut()
         if audioEngine.isRunning {
-            audioEngine.stop()
-            audioEngine.inputNode.removeTap(onBus: 0)
-            audioEngine.inputNode.reset()
             request.endAudio()
             recognitionTask?.cancel()
             recognitionTask = nil
+
+            audioEngine.stop()
+            audioEngine.inputNode.removeTap(onBus: 0)
+            audioEngine.inputNode.reset()
         }
+        audioOut()
         print("...STOPPED")
     }
     
@@ -227,6 +231,7 @@ class ViewController: UIViewController {
         recognitionTask = nil
     }
     
+    /*
     private func resumeRecording() {
         print("RESUME RECORDING")
         
@@ -236,18 +241,25 @@ class ViewController: UIViewController {
             [unowned self]
             (result, _) in
             if let transcription = result?.bestTranscription {
-                print(transcription)
+//                print(transcription)
                 print(transcription.formattedString)
                 self.processText(text: transcription.formattedString)
             }
         }
     }
-
+     */
     
 
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
-    @IBOutlet weak var sceneView: AGSSceneView!
+    @IBOutlet weak var arscnView: ARSCNView!
+    @IBOutlet weak var sceneView: AGSSceneView! {
+        didSet {
+            sceneView.isARModeEnabled = true
+        }
+    }
+    
+    
     @IBOutlet weak var menuButton: UIButton! {
         didSet {
             menuButton.layer.cornerRadius = 24
@@ -363,6 +375,7 @@ class ViewController: UIViewController {
     func addLayer(_ layer:Layer) {
         spinner.startAnimating()
         showNoah(true)
+        playDone()
         if layer == .crime {
             
 //            let portal = AGSPortal(url: URL(string: "https://www.arcgis.com")!, loginRequired: false)
@@ -379,14 +392,16 @@ class ViewController: UIViewController {
 
             mapLayer.load(completion: { error in
                 self.spinner.stopAnimating()
-                print(mapLayer.loadError)
+//                print(mapLayer.loadError)
                 if error != nil { print(error); return }
                 scene.operationalLayers.add(mapLayer)
-                
+
+                /*
                 let legend = mapLayer.fetchLegendInfos(completion: { infos, error in
                     //            ageLayer.showInLegend = true
                     print(infos)
                 })
+                 */
             })
 
 //            scene.operationalLayers.add(mapLayer)
@@ -398,14 +413,16 @@ class ViewController: UIViewController {
 //            scene.operationalLayers.add(mapLayer)
             mapLayer.load(completion: { error in
                 self.spinner.stopAnimating()
-                print(mapLayer.loadError)
+//                print(mapLayer.loadError)
                 if error != nil { print(error); return }
                 scene.operationalLayers.add(mapLayer)
-                
+
+                /*
                 let legend = mapLayer.fetchLegendInfos(completion: { infos, error in
                     //            ageLayer.showInLegend = true
                     print(infos)
                 })
+                 */
             })
             
         }
@@ -463,6 +480,8 @@ class ViewController: UIViewController {
     var alertSound = URL(fileURLWithPath: Bundle.main.path(forResource: "reveal", ofType: "wav")!)
     var alertPlayer : AVAudioPlayer!
 
+    var arMotionDataSource : AGSARKitMotionDataSource!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -475,16 +494,47 @@ class ViewController: UIViewController {
         
         showNoah(false)
 
-        //Assign the scene to the scene view
-        sceneView.scene = scene
         speechRecognizer?.delegate = self
         //Set the current viewpoint of the camera
 //        let camera = AGSCamera(latitude: 48.38, longitude: -4.493, altitude: 100, heading: 320, pitch: 70, roll: 0)
+        
+        /*
         let camera = AGSCamera(latitude: 39.94, longitude: -75.19, altitude: 1600, heading: 320, pitch: 70, roll: 0)
         sceneView.setViewpointCamera(camera)
-        sceneView.isAttributionTextVisible = false
         sceneView.currentViewpointCamera()
+         */
         
+        sceneView.isAttributionTextVisible = false
+
+        
+        let cameraSanDiego = AGSCamera(latitude: 32.707, longitude: -117.156, altitude: 100, heading: 180, pitch: 0, roll: 0)
+        let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
+                                       altitude: 1500,
+                                       heading: 45,
+                                       pitch: 0,
+                                       roll: 0)
+        let fpcController = AGSFirstPersonCameraController(initialPosition: cameraPhilly)
+        arMotionDataSource = AGSARKitMotionDataSource(arscnView: arscnView)
+        fpcController.motionDataSource = arMotionDataSource
+//        fpcController.motionDataSource = arMotionDataSource
+        
+        
+        sceneView.cameraController = fpcController
+
+        fpcController.translationFactor = 1000
+        
+        fpcController.frameRate = .quality  // .balanced
+        
+        arMotionDataSource.start { (error) in
+            if let error = error { print("error: \(error.localizedDescription)")}
+        }
+//        arMotionDataSource.start { (error) in
+//            print("motion data source started with error: " + "\(error?.localizedDescription ?? "no error")")
+//        }
+
+        //Assign the scene to the scene view
+        sceneView.scene = scene
+
         synthesizer.delegate = self
         
 //        addLayer(.demographics)
@@ -512,17 +562,20 @@ class ViewController: UIViewController {
     }
 
     var twoWord = false
+    var processing = false
     
     func processText(text:String) {
         showNoah(true)
-        defer { showNoah(false) }
+        if processing { return }
+        processing = true
+        defer { showNoah(false); processing = false }
         let str = text.lowercased()
         
         let sa = str.components(separatedBy: " ")
         if sa.contains("help") {
             twoWord = false
             if appMode == .map {
-                say("Try saying things like down, up, report, or reset")
+                say("Try saying things like zoom, bigger, show, mark, or exit")
             } else {
                 say("Try saying a location like Philidelphia")
             }
@@ -542,6 +595,7 @@ class ViewController: UIViewController {
                 self.doAsk()
                 self.appMode = .ask
             }
+            /*
         } else if sa.contains("down") {
             twoWord = false
             restartRecording(play:true)
@@ -557,6 +611,79 @@ class ViewController: UIViewController {
             let z = cam.location.z
             let newCam = cam.elevate(withDeltaAltitude: z)
             sceneView.setViewpointCamera(newCam, duration: 1.5, completion: nil)
+            */
+        } else if sa.contains("zoom") {
+            twoWord = false
+            let fpc : AGSFirstPersonCameraController = sceneView.cameraController as! AGSFirstPersonCameraController
+            if fpc.translationFactor <= 250 {
+                say("Too close")
+            } else {
+                restartRecording(play:true)
+
+                let cam = sceneView.currentViewpointCamera()
+                let nc = cam.elevate(withDeltaAltitude: -(cam.location.z / 2.0))
+                
+                fpc.isFadingTransition = true
+                fpc.translationFactor = fpc.translationFactor / 2.0
+                fpc.initialPosition = nc
+            }
+            
+//            let nc = AGSCamera(latitude: pt.latitude, longitude: pt.longitude, altitude: 250, heading: 0, pitch: 70, roll: 0)
+
+            /*
+            let cam = sceneView.currentViewpointCamera()
+            let pt = CLLocationCoordinate2D(latitude: 39.954934, longitude: -75.151022)
+//            var p = AGSPoint(clLocationCoordinate2D: pt)
+            let nc = AGSCamera(latitude: pt.latitude, longitude: pt.longitude, altitude: 250, heading: 0, pitch: 70, roll: 0)
+//            let newCam = cam.move(toLocation: p)
+            sceneView.setViewpointCamera(nc, duration: 1.5, completion: nil)
+             */
+            
+        } else if sa.contains("bigger") {
+            twoWord = false
+            let fpc : AGSFirstPersonCameraController = sceneView.cameraController as! AGSFirstPersonCameraController
+
+            if fpc.translationFactor >= 2000 {
+                say("Too far")
+            } else {
+                restartRecording(play:true)
+                
+                let cam = sceneView.currentViewpointCamera()
+                let nc = cam.elevate(withDeltaAltitude: cam.location.z)
+                
+                
+                fpc.isFadingTransition = true
+                fpc.translationFactor = fpc.translationFactor * 2.0
+                fpc.initialPosition = nc
+            }
+            
+        } else if sa.contains("mark") {
+            twoWord = false
+            restartRecording(play:true)
+            let cam = sceneView.currentViewpointCamera()
+            
+            var mp : AGSPoint = AGSGeometryEngine.projectGeometry(cam.location, to: .webMercator())! as! AGSPoint
+
+            
+//            let cp : AGSPoint = AGSGeometryEngine.projectGeometry(mp, to: .wgs84()) as! AGSPoint
+            let point = AGSPointMake3D(mp.x, mp.y + 200, 50, mp.m, mp.spatialReference)
+            
+            var relativeGraphicsOverlay: AGSGraphicsOverlay!
+            relativeGraphicsOverlay = AGSGraphicsOverlay()
+            relativeGraphicsOverlay.sceneProperties?.surfacePlacement = AGSSurfacePlacement.relative
+            sceneView.graphicsOverlays.add(relativeGraphicsOverlay)
+
+            let greenMarker = AGSSimpleMarkerSymbol(style: .circle, color: .green, size: 20)
+            let relativeGraphic = AGSGraphic(geometry: point, symbol: greenMarker)
+            relativeGraphicsOverlay.graphics.add(relativeGraphic)
+
+            /*
+            let pt = CLLocationCoordinate2D(latitude: 39.954934, longitude: -75.151022)
+            //            var p = AGSPoint(clLocationCoordinate2D: pt)
+            let nc = AGSCamera(latitude: pt.latitude, longitude: pt.longitude, altitude: 250, heading: 0, pitch: 70, roll: 0)
+            //            let newCam = cam.move(toLocation: p)
+            sceneView.setViewpointCamera(nc, duration: 1.5, completion: nil)
+             */
             
         } else if sa.contains("show") && !twoWord {
             twoWord = true
@@ -568,6 +695,7 @@ class ViewController: UIViewController {
         } else if twoWord {
             checkLayer(sa: sa)
         }
+        
     }
     
     func checkLayer(sa:[String]) {
