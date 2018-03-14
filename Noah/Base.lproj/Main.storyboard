@@ -51,6 +51,15 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" red="0.57411024310000003" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="headTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q5D-ow-bG5">
+                                <rect key="frame" x="255" y="24" width="120" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="Zic-vh-7ms"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="➕" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a7R-0T-64p">
                                 <rect key="frame" x="175" y="321.5" width="25" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -140,6 +149,7 @@
                             <constraint firstItem="ht8-cp-AVE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="PAq-Nr-jEa"/>
                             <constraint firstItem="RGy-FD-QWz" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="WGT-fi-d9W"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IBL-L3-rgu" secondAttribute="trailing" constant="16" id="Yc9-uE-LlN"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="q5D-ow-bG5" secondAttribute="trailing" id="Z3E-rA-mAz"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="bui-Vt-3qR"/>
                             <constraint firstItem="RGy-FD-QWz" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="dk7-1U-IQi"/>
                             <constraint firstItem="DCg-CN-X2g" firstAttribute="leading" secondItem="Lia-oY-AwY" secondAttribute="trailing" constant="30" id="ijz-Vf-blA"/>
@@ -150,6 +160,7 @@
                             <constraint firstItem="x8G-xM-Idq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="tRo-al-Knp"/>
                             <constraint firstItem="ht8-cp-AVE" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="uaG-qv-dyo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iAt-PS-oqe" secondAttribute="bottom" constant="16" id="v7c-8g-k8Z"/>
+                            <constraint firstItem="q5D-ow-bG5" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="4" id="xOl-1I-qnx"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -157,6 +168,7 @@
                         <outlet property="arscnView" destination="RGy-FD-QWz" id="I2z-1A-7rx"/>
                         <outlet property="askIV" destination="ht8-cp-AVE" id="Hoy-fu-XyA"/>
                         <outlet property="cameraButton" destination="IBL-L3-rgu" id="A6b-F2-mO4"/>
+                        <outlet property="heardLabel" destination="q5D-ow-bG5" id="Ssr-23-rzs"/>
                         <outlet property="menuButton" destination="iAt-PS-oqe" id="iyk-zA-3AL"/>
                         <outlet property="microphoneButton" destination="DCg-CN-X2g" id="A1q-Lk-WZ0"/>
                         <outlet property="noahIV" destination="zBM-vA-r1M" id="VbM-MG-o7X"/>

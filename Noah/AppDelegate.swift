@@ -8,6 +8,7 @@
 
 import UIKit
 import ArcGIS
+//import Parse
 
 var scene: AGSScene!
 
@@ -43,8 +44,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        /*
+        let configuration = ParseClientConfiguration {
+            $0.applicationId = "3qE4IXXBgBct0H5dCjMn98jUXCuhzinvc0slAGyQ"
+            $0.clientKey = "CL462Ab9qfBkJj8DjwnmkKhJgeN5ex4voUZGID4o$"
+            $0.server = "https://parseapi.back4app.com"
+        }
+        Parse.initialize(with: configuration)
+        saveInstallationObject()
+         */
+
         try? AGSArcGISRuntimeEnvironment.setLicenseKey("runtimelite,1000,rud3487322193,none,9TJC7XLS1MPH4P7EJ114")
         AGSArcGISRuntimeEnvironment.init()
+        
+        /*
+        let ft = AGSServiceFeatureTable(url: URL(string:"https://services2.arcgis.com/PmX3KsvHLzk1y5Hn/arcgis/rest/services/Philly_View_Sharing/FeatureServer/0")!)
+
+        ft.load(completion: { error in
+            let g = AGSPoint(x: 55, y: 42, spatialReference: ft.spatialReference)
+            let f = ft.createFeature(attributes: [:], geometry: g)
+            ft.add(f, completion: { error in
+                ft.applyEdits(completion: { results, error in
+                    
+                })
+            })
+        })
+         */
+
         
         //Create an instance of a scene
         scene = AGSScene()
@@ -81,6 +107,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    /*
+    func saveInstallationObject(){
+        if let installation = PFInstallation.current(){
+            installation.saveInBackground {
+                (success: Bool, error: Error?) in
+                if (success) {
+                    print("You have successfully connected your app to Back4App!")
+                } else {
+                    if let myError = error{
+                        print(myError.localizedDescription)
+                    }else{
+                        print("Uknown error")
+                    }
+                }
+            }
+        }
+    }
+     */
 
 }
 

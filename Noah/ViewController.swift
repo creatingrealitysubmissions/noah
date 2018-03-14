@@ -12,6 +12,12 @@ import Speech
 import AVFoundation
 import CoreLocation
 import MapKit
+import CoreLocation
+//import Parse
+//import ParseLiveQuery
+
+//let liveQueryClient: Client = ParseLiveQuery.Client(server: "wss://noah.back4app.io")
+
 
 extension ViewController : SFSpeechRecognizerDelegate {
     
@@ -56,6 +62,23 @@ class ViewController: UIViewController {
     
     enum AppMode { case ask, map }
     var appMode : AppMode = .ask
+    var myIdent = ""
+    let featureTable = AGSServiceFeatureTable(url: URL(string:"https://services2.arcgis.com/PmX3KsvHLzk1y5Hn/arcgis/rest/services/Philly_View_Sharing/FeatureServer/0")!)
+    
+    let edIdent = "885A6BE5-D314-4D06-8832-3B3EE3EEC1B7"
+    let noahIdent = "4979E40D-4765-40D8-9204-2D0E0983EF6D"
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        if let ident = UserDefaults.standard.string(forKey: "Noah_Identity") {
+            myIdent = ident
+        } else {
+            myIdent = UUID().uuidString
+            UserDefaults.standard.set(myIdent, forKey: "Noah_Identity")
+            UserDefaults.standard.synchronize()
+        }
+        print(myIdent)
+    }
     
     func say(_ text:String) {
         stopRecording()
@@ -79,7 +102,9 @@ class ViewController: UIViewController {
             self.noahIV.alpha = show ? 1 : 0
         }
     }
+//    private var subscription: Subscription<PFObject>!
 
+    @IBOutlet weak var heardLabel: UILabel!
     @IBOutlet weak var askIV: UIImageView!
     @IBAction func askIVTapped(_ sender: UITapGestureRecognizer) {
         restartRecording()
@@ -194,8 +219,12 @@ class ViewController: UIViewController {
             (result, _) in
             if let transcription = result?.bestTranscription {
 //                print(transcription)
-                print(transcription.formattedString)
-                self.processText(text: transcription.formattedString)
+                let text = transcription.formattedString
+                print(text)
+                DispatchQueue.main.async {
+                    self.heardLabel.text = text
+                }
+                self.processText(text: text)
             }
         }
     }
@@ -504,7 +533,8 @@ class ViewController: UIViewController {
     
     func setupPhilly() {
         //        let cameraSanDiego = AGSCamera(latitude: 32.707, longitude: -117.156, altitude: 100, heading: 180, pitch: 0, roll: 0)
-        let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
+        // Franklin Square:  39.955620 , -75.150497
+        let cameraPhilly = AGSCamera(latitude: 39.955620, longitude: -75.150497,
                                      altitude: 1500,
                                      heading: 45,
                                      pitch: 0,
@@ -520,15 +550,31 @@ class ViewController: UIViewController {
         
         fpcController.frameRate = .quality  // .balanced
         
+        let ft = AGSServiceFeatureTable(url: URL(string:"https://services2.arcgis.com/PmX3KsvHLzk1y5Hn/arcgis/rest/services/Philly_View_Sharing/FeatureServer/0")!)
+        scene.operationalLayers.add(ft)
+        
         arMotionDataSource.start { (error) in
             if let error = error { print("error: \(error.localizedDescription)")}
         }
         //        arMotionDataSource.start { (error) in
         //            print("motion data source started with error: " + "\(error?.localizedDescription ?? "no error")")
         //        }
+        
+        ft.load(completion: { error in
+            let g = AGSPoint(x: 55, y: 42, spatialReference: ft.spatialReference)
+            let f = ft.createFeature(attributes: [:], geometry: g)
+            ft.add(f, completion: { error in
+                ft.applyEdits(completion: { results, error in
+                    
+                })
+            })
+        })
+        
+        
+        
     }
     func resetPhilly() {
-        let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
+        let cameraPhilly = AGSCamera(latitude: 39.955620, longitude: -75.150497,
                                      altitude: 1500,
                                      heading: 45,
                                      pitch: 0,
@@ -578,6 +624,16 @@ class ViewController: UIViewController {
 
         synthesizer.delegate = self
         
+
+        /*n
+        let mQuery = PFQuery(className: "Marker")
+        mQuery.whereKey("To", equalTo: myIdent)
+
+        subscription = liveQueryClient.subscribe(mQuery).handle(Event.created) { _, object in
+            // This is where we handle the event
+            print(object)
+        }
+        */
 //        addLayer(.demographics)
     }
     
@@ -672,7 +728,7 @@ class ViewController: UIViewController {
         if sa.contains("help") {
             twoWord = false
             if appMode == .map {
-                say("Try saying things like zoom, bigger, show, mark, or exit")
+                say("Try saying things like zoom, bigger, show, mark, vocabulary, or exit")
             } else {
                 say("Try saying a location like Philidelphia")
             }
@@ -689,7 +745,7 @@ class ViewController: UIViewController {
             appMode = .map
         } else if sa.contains("vocabulary") {
             twoWord = false
-            say("zoom, bigger, address, origin, mark, clear, picture, exit, show safety, crime, demo, census")
+            say("These are the commands I know: zoom, bigger, address, origin, mark, info, share, clear, picture, exit, show safety, crime, demo, census")
 
         } else if sa.contains("done") || sa.contains("exit") {
             twoWord = false
@@ -818,6 +874,99 @@ class ViewController: UIViewController {
             //            let newCam = cam.move(toLocation: p)
             sceneView.setViewpointCamera(nc, duration: 1.5, completion: nil)
              */
+
+        } else if sa.contains("share") {
+            twoWord = false
+//            restartRecording(play:true)
+
+            var found = false
+            defer {
+                if !found { self.say("No mark to share") }
+            }
+            guard let overlay = sceneView.graphicsOverlays.lastObject as? AGSGraphicsOverlay else { return }
+            guard let g = (overlay.graphics.firstObject as? AGSGraphic)?.geometry else { return }
+
+            found = true
+            let geom = AGSGeometryEngine.projectGeometry(g, to: .wgs84()) as! AGSPoint
+            let fg = AGSPoint(x: geom.x, y: geom.y, spatialReference: geom.spatialReference)
+
+            // https://services2.arcgis.com/PmX3KsvHLzk1y5Hn/arcgis/rest/services/Philly_View_Sharing/FeatureServer/0
+
+            featureTable.load(completion: { error in
+                if error != nil { print(error); return }
+                
+                let ng = AGSGeometryEngine.normalizeCentralMeridian(of: fg)
+                let feature = self.featureTable.createFeature(attributes: [
+                    "Sender":self.myIdent,
+                    "Receiver":self.myIdent == self.edIdent ? self.noahIdent : self.edIdent
+                    ], geometry: ng)
+                guard let arcgisFeature = feature as? AGSArcGISFeature else { return }
+                self.featureTable.add(arcgisFeature) {(error: Error?) -> Void in
+                    if let error = error {
+                        print("Error while adding feature :: \(error.localizedDescription)")
+                        return
+                    }
+                    self.featureTable.applyEdits(completion: { (featureEditResults: [AGSFeatureEditResult]?, error: Error?)-> Void in
+                        if let error = error {
+                            print("Error while applying edit :: \(error.localizedDescription)")
+                            return
+                        }
+                        self.say("Shared")
+                        print("Apply Edits successful")
+                    })
+                }
+
+            })
+//            let fl = AGSFeatureLayer(featureTable: ft)
+
+            
+        } else if sa.contains("info") {
+            twoWord = false
+//            restartRecording(play:true)
+            
+            spinner.startAnimating()
+            var found = false
+            defer {
+                self.spinner.stopAnimating()
+                if !found { say("No mark on map") }
+            }
+            guard let overlay = sceneView.graphicsOverlays.lastObject as? AGSGraphicsOverlay else { return }
+            guard let g = (overlay.graphics.firstObject as? AGSGraphic)?.geometry else { return }
+            
+            found = true
+            let geom = AGSGeometryEngine.projectGeometry(g, to: .wgs84()) as! AGSPoint
+            let ll = geom.toCLLocationCoordinate2D()
+            let loc = CLLocation(latitude: ll.latitude, longitude: ll.longitude)
+
+            CLGeocoder().reverseGeocodeLocation(loc, completionHandler: {(placemarks, error) -> Void in
+                self.spinner.stopAnimating()
+                guard error == nil else {
+                    self.say("Unknown Place")
+                    print("Reverse geocoder failed with error" + error!.localizedDescription)
+                    return
+                }
+                guard let pm = placemarks?.first else {
+                    self.say("Unknown Place")
+                    print("Problem with the data received from geocoder")
+                    return
+                }
+                
+                let name = pm.name ?? ""
+                let subTh = pm.subThoroughfare ?? ""
+                let th = pm.thoroughfare ?? ""
+                let subLoc = pm.subLocality ?? ""
+                
+                print(name)
+                print(subTh)
+                print(th)
+                print(subLoc)
+                
+                let location = name + " " + subLoc
+                print(location)
+                if location.isEmpty { self.say("I'm not sure") }
+                else { self.say(location) }
+                
+            })
             
         } else if sa.contains("clear") {
             twoWord = false
@@ -840,9 +989,6 @@ class ViewController: UIViewController {
             addressMode = true
 //            request.shouldReportPartialResults = false
             
-        } else if sa.contains("address") {
-
-
         } else if sa.contains("show") && !twoWord {
             twoWord = true
             scene.operationalLayers.removeAllObjects()
