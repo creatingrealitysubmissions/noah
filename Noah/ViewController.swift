@@ -200,10 +200,10 @@ class ViewController: UIViewController {
         }
     }
     
-    private func stopRecording() {
+    private func stopRecording(_ force:Bool = false) {
         print("STOP RECORDING...")
         twoWord = false
-        if audioEngine.isRunning {
+        if audioEngine.isRunning || force {
             request.endAudio()
             recognitionTask?.cancel()
             recognitionTask = nil
@@ -475,6 +475,71 @@ class ViewController: UIViewController {
         }
     }
     
+    func doReset() {
+        let removes = sceneView.graphicsOverlays.filter { $0 is AGSGraphicsOverlay }
+        sceneView.graphicsOverlays.removeObjects(in: removes)
+        scene.operationalLayers.removeAllObjects()
+
+        arMotionDataSource.stop()
+        
+        audioOut()
+
+        stopRecording(true)
+        self.playDone()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            try? self.startRecording()
+        }
+    }
+    
+    @IBAction func longPressReset(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            doReset()
+            let fpc : AGSFirstPersonCameraController = self.sceneView.cameraController as! AGSFirstPersonCameraController
+            resetPhilly()
+            arMotionDataSource.start { (error) in
+                if let error = error { print("error: \(error.localizedDescription)")}
+            }
+        }
+    }
+    
+    func setupPhilly() {
+        //        let cameraSanDiego = AGSCamera(latitude: 32.707, longitude: -117.156, altitude: 100, heading: 180, pitch: 0, roll: 0)
+        let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
+                                     altitude: 1500,
+                                     heading: 45,
+                                     pitch: 0,
+                                     roll: 0)
+        let fpcController = AGSFirstPersonCameraController(initialPosition: cameraPhilly)
+        arMotionDataSource = AGSARKitMotionDataSource(arscnView: arscnView)
+        fpcController.motionDataSource = arMotionDataSource
+        //        fpcController.motionDataSource = arMotionDataSource
+        
+        sceneView.cameraController = fpcController
+        
+        fpcController.translationFactor = 1000
+        
+        fpcController.frameRate = .quality  // .balanced
+        
+        arMotionDataSource.start { (error) in
+            if let error = error { print("error: \(error.localizedDescription)")}
+        }
+        //        arMotionDataSource.start { (error) in
+        //            print("motion data source started with error: " + "\(error?.localizedDescription ?? "no error")")
+        //        }
+    }
+    func resetPhilly() {
+        let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
+                                     altitude: 1500,
+                                     heading: 45,
+                                     pitch: 0,
+                                     roll: 0)
+        
+        let fpc : AGSFirstPersonCameraController = sceneView.cameraController as! AGSFirstPersonCameraController
+        fpc.isFadingTransition = true
+        fpc.translationFactor = 1000
+        fpc.initialPosition = cameraPhilly
+    }
+    
     var doneSound = URL(fileURLWithPath: Bundle.main.path(forResource: "beep", ofType: "wav")!)
     var donePlayer : AVAudioPlayer!
     var alertSound = URL(fileURLWithPath: Bundle.main.path(forResource: "reveal", ofType: "wav")!)
@@ -506,31 +571,7 @@ class ViewController: UIViewController {
         
         sceneView.isAttributionTextVisible = false
 
-        
-//        let cameraSanDiego = AGSCamera(latitude: 32.707, longitude: -117.156, altitude: 100, heading: 180, pitch: 0, roll: 0)
-        let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
-                                       altitude: 1500,
-                                       heading: 45,
-                                       pitch: 0,
-                                       roll: 0)
-        let fpcController = AGSFirstPersonCameraController(initialPosition: cameraPhilly)
-        arMotionDataSource = AGSARKitMotionDataSource(arscnView: arscnView)
-        fpcController.motionDataSource = arMotionDataSource
-//        fpcController.motionDataSource = arMotionDataSource
-        
-        
-        sceneView.cameraController = fpcController
-
-        fpcController.translationFactor = 1000
-        
-        fpcController.frameRate = .quality  // .balanced
-        
-        arMotionDataSource.start { (error) in
-            if let error = error { print("error: \(error.localizedDescription)")}
-        }
-//        arMotionDataSource.start { (error) in
-//            print("motion data source started with error: " + "\(error?.localizedDescription ?? "no error")")
-//        }
+//        setupPhilly()
 
         //Assign the scene to the scene view
         sceneView.scene = scene
@@ -543,10 +584,10 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        setupPhilly()
+
         audioOut()
-        
         startRecognizer()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -638,6 +679,12 @@ class ViewController: UIViewController {
         } else if appMode == .ask {
             twoWord = false
             say("Let's go to philly!")
+            resetPhilly()
+            if !arMotionDataSource.started {
+                arMotionDataSource.start { (error) in
+                    if let error = error { print("error: \(error.localizedDescription)")}
+                }
+            }
             UIView.animate(withDuration: 1.0) { self.askIV.alpha = 0 }
             appMode = .map
         } else if sa.contains("vocabulary") {
@@ -646,13 +693,20 @@ class ViewController: UIViewController {
 
         } else if sa.contains("done") || sa.contains("exit") {
             twoWord = false
-            restartRecording(play:true)
+//            restartRecording(play:true)
+            say("Leaving philly!")
             if appMode == .ask { return }
             UIView.animate(withDuration: 0.5) { self.askIV.alpha = 1 }
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 self.doAsk()
                 self.appMode = .ask
+                
+                let removes = self.sceneView.graphicsOverlays.filter { $0 is AGSGraphicsOverlay }
+                self.sceneView.graphicsOverlays.removeObjects(in: removes)
+                scene.operationalLayers.removeAllObjects()
+                
+                self.arMotionDataSource.stop()
             }
             /*
         } else if sa.contains("down") {
@@ -718,24 +772,18 @@ class ViewController: UIViewController {
             
         } else if sa.contains("origin") {
             twoWord = false
-            
-            let cameraPhilly = AGSCamera(latitude: 39.94, longitude: -75.19,
-                                         altitude: 1500,
-                                         heading: 45,
-                                         pitch: 0,
-                                         roll: 0)
-
-            let fpc : AGSFirstPersonCameraController = sceneView.cameraController as! AGSFirstPersonCameraController
-            
             restartRecording(play:true)
-            
-            fpc.isFadingTransition = true
-            fpc.translationFactor = 1000
-            fpc.initialPosition = cameraPhilly
+            resetPhilly()
 
         } else if sa.contains("mark") {
             twoWord = false
             restartRecording(play:true)
+            
+            let point = sceneView.screen(toBaseSurface: arscnView.center)
+//            let p = sceneView.screen(toLocation: arscnView.center, completion: {point in
+//            })
+
+            /*
             let cam = sceneView.currentViewpointCamera()
             
             var mp : AGSPoint = AGSGeometryEngine.projectGeometry(cam.location, to: .webMercator())! as! AGSPoint
@@ -743,7 +791,8 @@ class ViewController: UIViewController {
             
 //            let cp : AGSPoint = AGSGeometryEngine.projectGeometry(mp, to: .wgs84()) as! AGSPoint
             let point = AGSPointMake3D(mp.x, mp.y + 200, 50, mp.m, mp.spatialReference)
-            
+             */
+
             var relativeGraphicsOverlay: AGSGraphicsOverlay!
             relativeGraphicsOverlay = AGSGraphicsOverlay()
             relativeGraphicsOverlay.sceneProperties?.surfacePlacement = AGSSurfacePlacement.relative

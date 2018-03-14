@@ -100,6 +100,17 @@
                                     <outletCollection property="gestureRecognizers" destination="61a-pf-CGJ" appends="YES" id="YRc-WR-YX0"/>
                                 </connections>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lia-oY-AwY">
+                                <rect key="frame" x="0.0" y="587" width="274" height="80"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="8UW-e8-ppq"/>
+                                </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="R36-Vv-cgd" appends="YES" id="MSZ-Mv-qvH"/>
+                                </connections>
+                            </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="x8G-xM-Idq">
                                 <rect key="frame" x="169" y="315" width="37" height="37"/>
                             </activityIndicatorView>
@@ -115,6 +126,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="DCg-CN-X2g" secondAttribute="trailing" constant="16" id="B4m-Ok-kQE"/>
                             <constraint firstItem="RGy-FD-QWz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="BfN-6t-beA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="DCg-CN-X2g" secondAttribute="bottom" constant="16" id="Bvc-sF-thS"/>
+                            <constraint firstItem="Lia-oY-AwY" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="EIH-NX-9Yi"/>
                             <constraint firstItem="x8G-xM-Idq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="End-po-vPU"/>
                             <constraint firstItem="RGy-FD-QWz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="ILW-tc-GYN"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="J8G-9Y-K6a"/>
@@ -123,6 +135,8 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IBL-L3-rgu" secondAttribute="trailing" constant="16" id="Yc9-uE-LlN"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="bui-Vt-3qR"/>
                             <constraint firstItem="RGy-FD-QWz" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="dk7-1U-IQi"/>
+                            <constraint firstItem="DCg-CN-X2g" firstAttribute="leading" secondItem="Lia-oY-AwY" secondAttribute="trailing" constant="30" id="ijz-Vf-blA"/>
+                            <constraint firstItem="Lia-oY-AwY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="jQR-op-mBN"/>
                             <constraint firstItem="zBM-vA-r1M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="k0j-h9-8aX"/>
                             <constraint firstItem="zBM-vA-r1M" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-4" id="pE6-PB-Tas"/>
                             <constraint firstItem="x8G-xM-Idq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="tRo-al-Knp"/>
@@ -153,6 +167,11 @@
                         <action selector="askIVTapped:" destination="BYZ-38-t0r" id="buo-xi-p7t"/>
                     </connections>
                 </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="1.5" id="R36-Vv-cgd">
+                    <connections>
+                        <action selector="longPressReset:" destination="BYZ-38-t0r" id="GSO-Ug-CHv"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="132.68365817091455"/>
         </scene>
