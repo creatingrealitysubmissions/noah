@@ -11,6 +11,7 @@ import ArcGIS
 import Speech
 import AVFoundation
 import CoreLocation
+import MapKit
 
 extension ViewController : SFSpeechRecognizerDelegate {
     
@@ -176,7 +177,6 @@ class ViewController: UIViewController {
 //        if audioEngine.isRunning { return }
         print("START RECORDING")
         
-//        request.shouldReportPartialResults = true
         
         let node = audioEngine.inputNode
         let recordingFormat = node.outputFormat(forBus: 0)
@@ -563,6 +563,7 @@ class ViewController: UIViewController {
 
     var twoWord = false
     var processing = false
+    var addressMode = false
     
     func processText(text:String) {
         showNoah(true)
@@ -570,8 +571,63 @@ class ViewController: UIViewController {
         processing = true
         defer { showNoah(false); processing = false }
         let str = text.lowercased()
-        
         let sa = str.components(separatedBy: " ")
+
+        if addressMode {
+            
+            if sa.contains("done") {
+                print(str)
+                var addr = sa.dropLast().joined(separator: " ")
+                print(addr)
+                addr.append(", philadelphia")
+                say(addr)
+                addr.append(" pa")
+
+                let philly = CLLocationCoordinate2D(latitude: 39.94, longitude: -75.19)
+                let reg = CLCircularRegion(center: philly, radius: 30000, identifier: "philly")
+                CLGeocoder().geocodeAddressString(addr, in: reg) { marks, error in
+                    defer { self.addressMode = false }
+                    if error != nil || marks == nil || marks!.isEmpty {
+                        print("No Address Result")
+                        self.say("I can't find that address")
+                        return
+                    }
+                    guard let marks = marks else { return }
+                    self.playDone()
+                    print(marks)
+                    if let loc = marks.first?.location {
+                        print(loc)
+                        let nc = AGSCamera(latitude: loc.coordinate.latitude, longitude: loc.coordinate.longitude, altitude: 187.5, heading: 0, pitch: 0, roll: 0)
+                        
+                        let fpc : AGSFirstPersonCameraController = self.sceneView.cameraController as! AGSFirstPersonCameraController
+                        fpc.isFadingTransition = true
+                        fpc.translationFactor = 125
+                        fpc.initialPosition = nc
+
+                    }
+                }
+                
+                /*
+                CLGeocoder().geocodeAddressString(addr) { marks, error in
+                    if error != nil { print(error!); return }
+                    guard let marks = marks else {
+                        print("No Address Result")
+                        self.say("I can't find that address")
+                        return
+                    }
+                    print(marks)
+                    if let loc = marks.first?.location {
+                        print(loc)
+                    }
+                }
+                 */
+            }
+//            request.shouldReportPartialResults = true
+
+            
+            return
+        }
+        
         if sa.contains("help") {
             twoWord = false
             if appMode == .map {
@@ -711,6 +767,15 @@ class ViewController: UIViewController {
             
             let removes = sceneView.graphicsOverlays.filter { $0 is AGSGraphicsOverlay }
             sceneView.graphicsOverlays.removeObjects(in: removes)
+
+        } else if sa.contains("address") {
+            twoWord = false
+            restartRecording(play:true)
+            addressMode = true
+//            request.shouldReportPartialResults = false
+            
+        } else if sa.contains("address") {
+
 
         } else if sa.contains("show") && !twoWord {
             twoWord = true
