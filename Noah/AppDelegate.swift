@@ -23,6 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        try? AGSArcGISRuntimeEnvironment.setLicenseKey("runtimelite,1000,rud3487322193,none,9TJC7XLS1MPH4P7EJ114")
+        AGSArcGISRuntimeEnvironment.init()
+        
         //Create an instance of a scene
         scene = AGSScene()
         //Define the basemap layer with ESRI imagery basemap

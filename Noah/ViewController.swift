@@ -245,6 +245,7 @@ class ViewController: UIViewController {
 
     
 
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     @IBOutlet weak var sceneView: AGSSceneView!
     @IBOutlet weak var menuButton: UIButton! {
@@ -355,19 +356,59 @@ class ViewController: UIViewController {
     enum Layer : String {
         case census = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer"
         case demographics = "https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Median_Age/MapServer"
-        case crime = "https://megacity.esri.com/ArcGIS/rest/services/Demographics/USA_CrimeIndex/MapServer"
+        case crime = "https://utility.arcgis.com/usrsvcs/servers/519f044648cd4d169117a4d2d39dca75/rest/services/USA_Crime/MapServer"
+        case safety = "https://megacity.esri.com/ArcGIS/rest/services/Demographics/USA_CrimeIndex/MapServer"
     }
     
     func addLayer(_ layer:Layer) {
+        spinner.startAnimating()
         showNoah(true)
-        let mapLayer = AGSArcGISMapImageLayer(url: URL(string: layer.rawValue)!)
-        mapLayer.opacity = 0.5
-        scene.operationalLayers.add(mapLayer)
+        if layer == .crime {
+            
+//            let portal = AGSPortal(url: URL(string: "https://www.arcgis.com")!, loginRequired: false)
+            // https://utility.arcgis.com/usrsvcs/servers/519f044648cd4d169117a4d2d39dca75/rest/services/USA_Crime/MapServer
+            // 519f044648cd4d169117a4d2d39dca75
+            // 9fb4d96077e24bcba72ba6cf1139c9cf
+            let portalItem = AGSPortalItem(portal: self.portal, itemID: "519f044648cd4d169117a4d2d39dca75")
+//            let item = AGSPortalItem(url: URL(string:"https://utility.arcgis.com/usrsvcs/servers/519f044648cd4d169117a4d2d39dca75/rest/services/USA_Crime/MapServer")!)
+//            print(item?.serviceURL)
+//            let params = AGSPortalQueryParameters()
+            guard let url = portalItem.serviceURL else { return }
+            let mapLayer = AGSArcGISMapImageLayer(url: url)
+            mapLayer.opacity = 0.5
 
-        let legend = mapLayer.fetchLegendInfos(completion: { infos, error in
-            //            ageLayer.showInLegend = true
-            print(infos)
-        })
+            mapLayer.load(completion: { error in
+                self.spinner.stopAnimating()
+                print(mapLayer.loadError)
+                if error != nil { print(error); return }
+                scene.operationalLayers.add(mapLayer)
+                
+                let legend = mapLayer.fetchLegendInfos(completion: { infos, error in
+                    //            ageLayer.showInLegend = true
+                    print(infos)
+                })
+            })
+
+//            scene.operationalLayers.add(mapLayer)
+
+
+        } else {
+            let mapLayer = AGSArcGISMapImageLayer(url: URL(string: layer.rawValue)!)
+            mapLayer.opacity = 0.5
+//            scene.operationalLayers.add(mapLayer)
+            mapLayer.load(completion: { error in
+                self.spinner.stopAnimating()
+                print(mapLayer.loadError)
+                if error != nil { print(error); return }
+                scene.operationalLayers.add(mapLayer)
+                
+                let legend = mapLayer.fetchLegendInfos(completion: { infos, error in
+                    //            ageLayer.showInLegend = true
+                    print(infos)
+                })
+            })
+            
+        }
 
         /*
         let tiledLayer = AGSArcGISTiledLayer(url: URL(string: "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer")!)
@@ -425,14 +466,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        getPublic()
+
         alertPlayer = try! AVAudioPlayer(contentsOf: alertSound)
         alertPlayer.prepareToPlay()
         donePlayer = try! AVAudioPlayer(contentsOf: doneSound)
         donePlayer.prepareToPlay()
         
         showNoah(false)
-        
+
         //Assign the scene to the scene view
         sceneView.scene = scene
         speechRecognizer?.delegate = self
@@ -532,6 +574,9 @@ class ViewController: UIViewController {
         if sa.contains("crime") {
             restartRecording(play:true)
             addLayer(.crime)
+        } else if sa.contains("safety") {
+            restartRecording(play:true)
+            addLayer(.safety)
         } else if sa.contains("demo") {
             restartRecording(play:true)
             addLayer(.demographics)

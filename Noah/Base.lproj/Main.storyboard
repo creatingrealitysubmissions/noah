@@ -97,6 +97,9 @@
                                     <outletCollection property="gestureRecognizers" destination="61a-pf-CGJ" appends="YES" id="YRc-WR-YX0"/>
                                 </connections>
                             </imageView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="x8G-xM-Idq">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.57411024305555558" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -108,12 +111,14 @@
                             <constraint firstItem="IBL-L3-rgu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="9q8-8b-rkp"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="DCg-CN-X2g" secondAttribute="trailing" constant="16" id="B4m-Ok-kQE"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="DCg-CN-X2g" secondAttribute="bottom" constant="16" id="Bvc-sF-thS"/>
+                            <constraint firstItem="x8G-xM-Idq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="End-po-vPU"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="J8G-9Y-K6a"/>
                             <constraint firstItem="ht8-cp-AVE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="PAq-Nr-jEa"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="IBL-L3-rgu" secondAttribute="trailing" constant="16" id="Yc9-uE-LlN"/>
                             <constraint firstItem="GdU-Nf-diF" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="bui-Vt-3qR"/>
                             <constraint firstItem="zBM-vA-r1M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="k0j-h9-8aX"/>
                             <constraint firstItem="zBM-vA-r1M" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-4" id="pE6-PB-Tas"/>
+                            <constraint firstItem="x8G-xM-Idq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="tRo-al-Knp"/>
                             <constraint firstItem="ht8-cp-AVE" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="uaG-qv-dyo"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="iAt-PS-oqe" secondAttribute="bottom" constant="16" id="v7c-8g-k8Z"/>
                         </constraints>
@@ -126,6 +131,7 @@
                         <outlet property="microphoneButton" destination="DCg-CN-X2g" id="A1q-Lk-WZ0"/>
                         <outlet property="noahIV" destination="zBM-vA-r1M" id="VbM-MG-o7X"/>
                         <outlet property="sceneView" destination="GdU-Nf-diF" id="YDB-Ml-d3b"/>
+                        <outlet property="spinner" destination="x8G-xM-Idq" id="FRX-hS-Dtz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
