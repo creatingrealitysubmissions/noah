@@ -35,6 +35,8 @@
 	<string>Noah can provide information around you.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>The microphone is used to recognize your commands</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save a screenshot to your photo library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Add your image as an avatar so others can find you.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

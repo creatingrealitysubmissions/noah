@@ -11,6 +11,25 @@ import ArcGIS
 
 var scene: AGSScene!
 
+extension UIApplication {
+    
+    var screenShot: UIImage?  {
+        
+        if let layer = keyWindow?.layer {
+            let scale = UIScreen.main.scale
+            
+            UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, scale);
+            if let context = UIGraphicsGetCurrentContext() {
+                layer.render(in: context)
+                let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                return screenshot
+            }
+        }
+        return nil
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

@@ -67,8 +67,8 @@ class ViewController: UIViewController {
         synthesizer.speak(utterance)
     }
     
-    func playDone() {
-        AudioServicesPlayAlertSound(SystemSoundID(1322))
+    func playDone(sound:Int = 1322) {
+        AudioServicesPlayAlertSound(SystemSoundID(UInt32(sound)))
 
 //        audioOut()
 //        donePlayer.play()
@@ -216,9 +216,9 @@ class ViewController: UIViewController {
         print("...STOPPED")
     }
     
-    private func restartRecording(play:Bool = false) {
+    private func restartRecording(play:Bool = false, sound:Int = 1322) {
         stopRecording()
-        if play { playDone() }
+        if play { playDone(sound: sound) }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             try? self.startRecording()
         }
@@ -689,7 +689,7 @@ class ViewController: UIViewController {
             appMode = .map
         } else if sa.contains("vocabulary") {
             twoWord = false
-            say("zoom, bigger, mark, clear, origin, exit, show safety, crime, demo, census")
+            say("zoom, bigger, address, origin, mark, clear, picture, exit, show safety, crime, demo, census")
 
         } else if sa.contains("done") || sa.contains("exit") {
             twoWord = false
@@ -733,8 +733,17 @@ class ViewController: UIViewController {
             } else {
                 restartRecording(play:true)
 
+                let point = sceneView.screen(toBaseSurface: arscnView.center)
+
                 let cam = sceneView.currentViewpointCamera()
-                let nc = cam.elevate(withDeltaAltitude: -(cam.location.z / 2.0))
+                let loc = cam.location
+                let xd = loc.x - (loc.x - point.x) / 2
+                let yd = loc.y - (loc.y - point.y) / 2
+                let zd = loc.z - (loc.z - point.z) / 2
+                let np = AGSPoint(x: xd, y: yd, z: zd, m: loc.m, spatialReference: loc.spatialReference)
+                
+                let nc = AGSCamera(location: np, heading: cam.heading, pitch: cam.pitch, roll: cam.roll)
+//                let nc = cam.elevate(withDeltaAltitude: -(cam.location.z / 2.0))
                 
                 fpc.isFadingTransition = true
                 fpc.translationFactor = fpc.translationFactor / 2.0
@@ -816,6 +825,14 @@ class ViewController: UIViewController {
             
             let removes = sceneView.graphicsOverlays.filter { $0 is AGSGraphicsOverlay }
             sceneView.graphicsOverlays.removeObjects(in: removes)
+            
+        } else if sa.contains("picture") {
+            twoWord = false
+            restartRecording(play:true, sound: 1108)
+            
+            if let img = screenShot() {
+                UIImageWriteToSavedPhotosAlbum(img, self, #selector(imageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+            }
 
         } else if sa.contains("address") {
             twoWord = false
@@ -839,6 +856,29 @@ class ViewController: UIViewController {
         
     }
     
+    func screenShot() -> UIImage? {
+        let v = arscnView.snapshotView(afterScreenUpdates: true)
+        let sv = sceneView.snapshotView(afterScreenUpdates: true)
+        if let layer = sv?.layer {
+            let scale = UIScreen.main.scale
+            UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, scale);
+            if let context = UIGraphicsGetCurrentContext() {
+                layer.render(in: context)
+                let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                return screenshot
+            }
+        }
+        return nil
+    }
+    @objc func imageSaved(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if error != nil {
+            say("Not saved, sorry!")
+        } else {
+            say("Image saved!")
+        }
+    }
+
     func checkLayer(sa:[String]) {
         if sa.contains("crime") {
             restartRecording(play:true)
