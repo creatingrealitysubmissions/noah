@@ -394,11 +394,15 @@ class ViewController: UIViewController {
          */
     }
     
+    //        case crime = "https://utility.arcgis.com/usrsvcs/servers/519f044648cd4d169117a4d2d39dca75/rest/services/USA_Crime/MapServer"
+
     enum Layer : String {
         case census = "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer"
         case demographics = "https://services.arcgisonline.com/arcgis/rest/services/Demographics/USA_Median_Age/MapServer"
-        case crime = "https://utility.arcgis.com/usrsvcs/servers/519f044648cd4d169117a4d2d39dca75/rest/services/USA_Crime/MapServer"
-        case safety = "https://megacity.esri.com/ArcGIS/rest/services/Demographics/USA_CrimeIndex/MapServer"
+        case crime = "https://megacity.esri.com/ArcGIS/rest/services/Demographics/USA_CrimeIndex/MapServer"
+//        case safety = "https://megacity.esri.com/ArcGIS/rest/services/Demographics/USA_CrimeIndex/MapServer"
+        case poverty = "https://atlasmaps.esri.com/arcgis/rest/services/Esri/Poverty_Ratio/MapServer"
+        case tapestry = "https://www.arcgis.com/home/item.html?id=1d493a3805f54a18a20e9cf0dc97fedf"
     }
     
     func addLayer(_ layer:Layer) {
@@ -745,7 +749,7 @@ class ViewController: UIViewController {
             appMode = .map
         } else if sa.contains("vocabulary") {
             twoWord = false
-            say("These are the commands I know: zoom, bigger, address, origin, mark, info, share, clear, picture, exit, show safety, crime, demo, census")
+            say("These are the commands I know: zoom, bigger, address, origin, mark, info, share, clear, picture, exit, show crime, demo, census, poverty, tapestry")
 
         } else if sa.contains("done") || sa.contains("exit") {
             twoWord = false
@@ -784,11 +788,22 @@ class ViewController: UIViewController {
         } else if sa.contains("zoom") {
             twoWord = false
             let fpc : AGSFirstPersonCameraController = sceneView.cameraController as! AGSFirstPersonCameraController
-            if fpc.translationFactor <= 125 {
+            if fpc.translationFactor <= 62.5 {
                 say("Too close")
             } else {
                 restartRecording(play:true)
 
+                /*
+                let fov = arscnView.scene.rootNode.childNodes
+                print(fov)
+                if let cam = fov.first?.camera {
+                    print(cam.fieldOfView)
+                    cam.fieldOfView = cam.fieldOfView / 2
+                }
+                
+                return
+                 */
+                
                 let point = sceneView.screen(toBaseSurface: arscnView.center)
 
                 let cam = sceneView.currentViewpointCamera()
@@ -798,7 +813,7 @@ class ViewController: UIViewController {
                 let zd = loc.z - (loc.z - point.z) / 2
                 let np = AGSPoint(x: xd, y: yd, z: zd, m: loc.m, spatialReference: loc.spatialReference)
                 
-                let nc = AGSCamera(location: np, heading: cam.heading, pitch: cam.pitch, roll: cam.roll)
+                let nc = AGSCamera(location: np, heading: 45, pitch: 0, roll: 0)
 //                let nc = cam.elevate(withDeltaAltitude: -(cam.location.z / 2.0))
                 
                 fpc.isFadingTransition = true
@@ -817,7 +832,7 @@ class ViewController: UIViewController {
             sceneView.setViewpointCamera(nc, duration: 1.5, completion: nil)
              */
             
-        } else if sa.contains("bigger") {
+        } else if sa.contains("bigger") || sa.contains("out") {
             twoWord = false
             let fpc : AGSFirstPersonCameraController = sceneView.cameraController as! AGSFirstPersonCameraController
 
@@ -826,10 +841,19 @@ class ViewController: UIViewController {
             } else {
                 restartRecording(play:true)
                 
+//                let cam = sceneView.currentViewpointCamera()
+//                let nc = cam.elevate(withDeltaAltitude: cam.location.z)
+                let point = sceneView.screen(toBaseSurface: arscnView.center)
+
                 let cam = sceneView.currentViewpointCamera()
-                let nc = cam.elevate(withDeltaAltitude: cam.location.z)
+                let loc = cam.location
+                let xd = loc.x + (loc.x - point.x)
+                let yd = loc.y + (loc.y - point.y)
+                let zd = loc.z + (loc.z - point.z)
+                let np = AGSPoint(x: xd, y: yd, z: zd, m: loc.m, spatialReference: loc.spatialReference)
                 
-                
+                let nc = AGSCamera(location: np, heading: 45, pitch: 0, roll: 0)
+
                 fpc.isFadingTransition = true
                 fpc.translationFactor = fpc.translationFactor * 2.0
                 fpc.initialPosition = nc
@@ -1031,13 +1055,22 @@ class ViewController: UIViewController {
             addLayer(.crime)
         } else if sa.contains("safety") {
             restartRecording(play:true)
-            addLayer(.safety)
+            addLayer(.crime)
+        } else if sa.contains("poverty") {
+            restartRecording(play:true)
+            addLayer(.poverty)
+        } else if sa.contains("tapestry") {
+            restartRecording(play:true)
+            addLayer(.tapestry)
         } else if sa.contains("demo") {
             restartRecording(play:true)
             addLayer(.demographics)
         } else if sa.contains("census") {
             restartRecording(play:true)
             addLayer(.census)
+        } else if sa.contains("help") {
+            restartRecording(play:true)
+            say("These are the layers I know: safety, crime, demo, census, poverty, tapestry")
         }
         twoWord = false
     }
